@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Basic demo</title>
+</head>
+<body>
+<div style="text-align:center">
+	<canvas id="MyCanvas" style="background:black;"></canvas>
+</div>
+<p id="Info"></p>
+<p>
+	<button onclick="gx.start()">Start</button>
+	<button onclick="gx.stop()">Stop</button>
+</p>
+<p>Zoom: <input type="range" onchange="gx.zoom(this.value)" min="10" max="200" value="100"></p>
+<p>Scroll:
+	<button onclick="gx.scroll(gx.scroll('', gx.scroll().y+10))">Scroll up</button>
+	<button onclick="gx.scroll(gx.scroll('', gx.scroll().y-10))">Scroll down</button>
+	<button onclick="gx.scroll(gx.scroll(gx.scroll().x+10))">Scroll left</button>
+	<button onclick="gx.scroll(gx.scroll(gx.scroll().x-10))">Scroll right</button>
+</p>
+<button onclick="addRectangle()">Add rectangle</button>
+<button onclick="addCircle()">Add circle</button>
+
+
+<script src="../dist/graphyx.js"></script>
+<script>
+	var info = document.querySelector('#Info');
+	var gx = new GraphyX.Engine( {canvas: '#MyCanvas'} );
+	gx.resize(800, 600);
+	gx.addEventListener('update', onUpdate);
+	gx.start();
+
+	function onUpdate(ev) {
+		info.innerText = 'Zoom: ' + gx.zoom() + '%   FPS: ' + ev.fps;
+		gx.objects.forEach(function(obj) {
+			var a = ang(0, 0, obj.x, obj.y);
+			a += Math.PI/2;
+			obj.x += Math.cos(a);
+			obj.y += Math.sin(a);
+		});
+	}
+
+	function addRectangle() {
+		var obj = new GraphyX.objects.Rect({
+			x: rnd(-400, 400),
+			y: rnd(-300, 300),
+			width: rnd(50, 100),
+			height: rnd(50, 100),
+			fill: 'royalblue',
+			stroke: 'cyan'
+		});
+
+		gx.objects.push( obj );
+	}
+
+	function addCircle() {
+		var obj = new GraphyX.objects.Circle({
+			x: rnd(-400, 400),
+			y: rnd(-300, 300),
+			radius: rnd(20, 50),
+			fill: 'forestgreen',
+			stroke: 'yellowgreen'
+		});
+
+		gx.objects.push( obj );
+	}
+
+	function rnd(n, m) {
+		return parseInt( Math.random() * (m - n) + n );
+	}
+
+	function ang(x1, y1, x2, y2) { return Math.atan2((y1 - y2), (x1 - x2)); }
+</script>
+</body>
+</html>

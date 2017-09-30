@@ -70,6 +70,10 @@ Engine.prototype = {
 	resize: function(w, h) {
 		this._canvas.width = this.CANVAS_WIDTH = w;
 		this._canvas.height = this.CANVAS_HEIGHT = h;
+		this._pan = {
+			x: w / 2,
+			y: h / 2
+		};
 	},
 
 
@@ -167,7 +171,12 @@ Engine.prototype = {
 	refresh: function(dt) {
 		this.clear();
 		this.draw();
-		this._onUpdate(dt);
+		this.dispatchEvent({
+			type:'update',
+			target:this,
+			delta:dt,
+			fps:this._fps
+		});
 	},
 
 

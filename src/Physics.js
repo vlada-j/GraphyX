@@ -1,15 +1,18 @@
 // IMPORTING
-var  b2Vec2			= Box2D.Common.Math.b2Vec2
-	,b2World		= Box2D.Dynamics.b2World
-	,b2DebugDraw	= Box2D.Dynamics.b2DebugDraw
-	,b2Body			= Box2D.Dynamics.b2Body
-	,b2BodyDef		= Box2D.Dynamics.b2BodyDef
-	,b2FixtureDef	= Box2D.Dynamics.b2FixtureDef
-	,b2PolygonShape	= Box2D.Collision.Shapes.b2PolygonShape
-	,b2CircleShape	= Box2D.Collision.Shapes.b2CircleShape
-	,b2AABB			= Box2D.Collision.b2AABB
-	,b2RevoluteJointDef	= Box2D.Dynamics.Joints.b2RevoluteJointDef
-;
+var  b2Vec2, b2World, b2DebugDraw, b2Body, b2BodyDef, b2FixtureDef, b2PolygonShape, b2CircleShape, b2AABB, b2RevoluteJointDef;
+
+function importBox2D() {
+	b2Vec2  			= Box2D.Common.Math.b2Vec2;
+	b2World	        	= Box2D.Dynamics.b2World;
+	b2DebugDraw     	= Box2D.Dynamics.b2DebugDraw;
+	b2Body  			= Box2D.Dynamics.b2Body;
+	b2BodyDef   		= Box2D.Dynamics.b2BodyDef;
+	b2FixtureDef    	= Box2D.Dynamics.b2FixtureDef;
+	b2PolygonShape  	= Box2D.Collision.Shapes.b2PolygonShape;
+	b2CircleShape   	= Box2D.Collision.Shapes.b2CircleShape;
+	b2AABB		    	= Box2D.Collision.b2AABB;
+	b2RevoluteJointDef	= Box2D.Dynamics.Joints.b2RevoluteJointDef;
+}
 
 
 import EventDispatcher from './EventDispatcher.js';
@@ -18,12 +21,13 @@ import { extend } from './utility.js';
 /* *********************************************************************************************** *
  * Physics engine
  * =============================================================================================== *
- * REQUIRE: EventDispatcher
+ * REQUIRE: Box2D, EventDispatcher
  * *********************************************************************************************** */
 export default Physics;
 
 
 function Physics(settings) {
+	importBox2D();
 	EventDispatcher.call(this);
 
 	this.CANVAS_WIDTH;
