@@ -1,3 +1,4 @@
+import EventDispatcher from './EventDispatcher.js';
 import Engine from './Engine.js';
 import GraphicObject from './objects/GraphicObject.js';
 import Circle from './objects/Circle.js';
@@ -15,6 +16,7 @@ import PhPolygon from './physicObjects/Polygon.js';
 
 window.GraphyX = {
 	VERSION: '0.1',
+	EventDispatcher: EventDispatcher,
 	Engine: Engine,
 	objects: {
 		GraphicObject: GraphicObject,
