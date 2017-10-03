@@ -30,7 +30,7 @@
 	var gx = new GraphyX.Engine( {canvas: '#MyCanvas'} );
 	gx.resize(800, 600);
 	gx.addEventListener('update', onUpdate);
-	gx.start();
+//	gx.start();
 
 	function onUpdate(ev) {
 		info.innerText = 'Zoom: ' + gx.zoom() + '%   FPS: ' + ev.fps;
