@@ -186,8 +186,8 @@ Engine.prototype = {
 	scroll: function(x, y) {
 		if(x === undefined && y === undefined) { return this._pan; }
 
-		this._pan.x = x || this._pan.x;
-		this._pan.y = y || this._pan.y;
+		if (x !== undefined && x !== null) { this._pan.x = x; }
+		if (y !== undefined && y !== null) { this._pan.y = y; }
 
 		if(!this._isRun) { this.refresh(); }
 	},
@@ -216,6 +216,21 @@ Engine.prototype = {
 		return {
 			x: (x - px) / z,
 			y: (y - py) / z
+		};
+	},
+
+
+	//--------------------------------------------------------------------------------------------------
+	// Get pixel color from coordinate
+	//--------------------------------------------------------------------------------------------------
+	getPixel: function(x, y) {
+		var pixel = this._sprite.getImageData(x, y, 1, 1).data;
+
+		return {
+			r: pixel[0],
+			g: pixel[1],
+			b: pixel[2],
+			a: pixel[3],
 		};
 	}
 };

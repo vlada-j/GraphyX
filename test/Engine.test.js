@@ -72,16 +72,17 @@ describe('GraphyX.Engine tests', function(){
 		let gx = new GraphyX.Engine({canvas:canvas});
 		let position = gx.scroll();
 
-		gx.objects.push(new GraphyX.objects.Line({points:[{x:0, y:0}, {x:10, y:10}], stroke:'white'}));
+		gx.objects.push(new GraphyX.objects.Line({points:[{x:0, y:0}, {x:10, y:0}], line:2, stroke:'white'}));
 		gx.refresh();
 		expect( canvas.getContext('2d').isPointInStroke(position.x, position.y) ).toBe(true);
+
 		gx.scroll(100,100);
 		expect( canvas.getContext('2d').isPointInStroke(100, 100) ).toBe(true);
 
 		gx.scroll(200);
 		expect( canvas.getContext('2d').isPointInStroke(200, 100) ).toBe(true);
 
-		gx.scroll(undefined, 300);
+		gx.scroll(null, 300);
 		expect( canvas.getContext('2d').isPointInStroke(200, 300) ).toBe(true);
 	});
 
@@ -100,5 +101,51 @@ describe('GraphyX.Engine tests', function(){
 		gx.zoom(200);
 		expect( ctx.isPointInStroke(canvas.width / 2, canvas.height / 2) ).toBe(true);
 		expect( ctx.isPointInStroke(canvas.width / 2 + 20, canvas.height / 2 + 20) ).toBe(true);
+	});
+
+	//--------------------------------------------------------------------------------------------------
+
+	it('Get real coordinate', function(){
+		let canvas = document.createElement('canvas');
+		let gx = new GraphyX.Engine({canvas:canvas});
+
+		gx.resize(100, 100);
+		let cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(-50);
+		expect(cord.y).toBe(-50);
+
+		cord = gx.getCoordinateFrom(100, 100);
+		expect(cord.x).toBe(50);
+		expect(cord.y).toBe(50);
+
+		gx.zoom(200);
+		cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(-25);
+		expect(cord.y).toBe(-25);
+		cord = gx.getCoordinateFrom(100, 100);
+		expect(cord.x).toBe(25);
+		expect(cord.y).toBe(25);
+
+		gx.zoom(50);
+		cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(-100);
+		expect(cord.y).toBe(-100);
+
+		gx.zoom(100);
+		gx.scroll(0,0);
+		cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(0);
+		expect(cord.y).toBe(0);
+
+		gx.scroll(50,50);
+		cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(-50);
+		expect(cord.y).toBe(-50);
+
+		gx.scroll(20,-30);
+		gx.zoom(200);
+		cord = gx.getCoordinateFrom(0, 0);
+		expect(cord.x).toBe(-10);
+		expect(cord.y).toBe(15);
 	});
 });
