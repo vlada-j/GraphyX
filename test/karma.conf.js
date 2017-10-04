@@ -13,8 +13,14 @@ module.exports = function(config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
     singleRun: false,
-    concurrency: Infinity
+    concurrency: Infinity,
+    browsers: ['Headless_Chrome'],
+    customLaunchers: {
+	  Headless_Chrome: {
+	    base: 'Chrome',
+        flags: ['--headless', '--disable-gpu', '--remote-debugging-port=9222', '--http://0.0.0.0:9876/']
+      }
+    }
   })
 };
