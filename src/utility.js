@@ -1,11 +1,12 @@
-export function extend(o1, o2) {
+export function extend(o1, o2, o3) {
 	o1 = o1 || {};
 	o2 = o2 || {};
 	for(var key in o2) {
 		if(o2.hasOwnProperty(key)) {
-			o1[key] = isPlainObject(o2[key]) ? extend(o1[key], o2[key]) : o1[key] === undefined ? o2[key] : o1[key];
+			o1[key] = isPlainObject(o2[key]) ? extend(o1[key], o2[key]) : o2[key] === undefined ? o1[key] : o2[key];
 		}
 	}
+	if(o3) { extend(o1, o3); }
 	return o1;
 }
 

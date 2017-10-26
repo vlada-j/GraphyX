@@ -33,7 +33,7 @@ function Physics(settings) {
 	this.CANVAS_WIDTH;
 	this.CANVAS_HEIGHT;
 	this.SCALE;
-	this._settings = extend(settings, Physics.default);
+	this._settings = settings = extend({}, Physics.default, settings);
 	this._isRun = false;
 	this._world;
 	this._canvas;
@@ -59,7 +59,7 @@ Physics.prototype = {
 	// Initialize
 	init: function(settings) {
 		var canvas, gravity, sprite;
-		extend(settings, this._settings);
+		settings = extend(this._settings, settings);
 
 		canvas = typeof settings.canvas === 'string' ? document.querySelector(settings.canvas) : settings.canvas;
 		sprite = canvas.getContext('2d');
