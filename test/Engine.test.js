@@ -148,4 +148,33 @@ describe('GraphyX.Engine tests', function(){
 		expect(cord.x).toBe(-10);
 		expect(cord.y).toBe(15);
 	});
+
+	//--------------------------------------------------------------------------------------------------
+
+	it('Following', function(){
+		let canvas = document.createElement('canvas');
+		canvas.width = 100;
+		canvas.height = 100;
+		let gx = new GraphyX.Engine({canvas:canvas});
+
+		let position = {x: gx.scroll().x, y: gx.scroll().y };
+		let rect = new GraphyX.objects.Rect({x:0, y:0, width:10, height:10, fill: 'royalblue', stroke: 'cyan'});
+		gx.objects.push(rect);
+
+		expect(typeof gx.following).toBe('function');
+		expect(gx.following()).toBe(null);
+
+		gx.following(0);
+		gx.refresh();
+
+		expect(gx.following()).toBe(rect);
+		expect(gx.scroll()).toEqual(position);
+
+		gx.zoom(50);
+		rect.x = 100;
+		rect.y = 200;
+		gx.refresh();
+
+		expect(gx.scroll()).toEqual( {x: position.x - 50, y: position.y - 100} );
+	});
 });

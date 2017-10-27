@@ -22,7 +22,11 @@ function Engine(settings) {
 	this._isRun = false;
 	this._lastTimestamp = 0;
 	this._fps = 0;
+	this._followingTarget = null;
 	this._onUpdate = function() {};
+
+	// List of objects who will be plotted
+	this.objects = [];
 
 	this.init(settings);
 }
@@ -33,10 +37,6 @@ Engine.prototype = {
 
 
 	constructor: Engine,
-
-
-	// List of objects who will be plotted
-	objects: [],
 
 
 	//--------------------------------------------------------------------------------------------------
@@ -130,7 +130,6 @@ Engine.prototype = {
 	//--------------------------------------------------------------------------------------------------
 	draw: function() {
 		var self = this;
-		self.clear();
 
 		if(self.objects instanceof Array) {
 			self.objects.forEach(drawObject);
@@ -160,6 +159,10 @@ Engine.prototype = {
 			this._sprite.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_WIDTH);
 		}
 
+		if(this._followingTarget) {
+			this._pan.x = this._canvas.width / 2 - this._followingTarget.x * this._zoom;
+			this._pan.y = this._canvas.height / 2 - this._followingTarget.y * this._zoom;
+		}
 		this._sprite.translate(this._pan.x, this._pan.y);
 		this._sprite.scale(this._zoom, this._zoom);
 	},
@@ -190,6 +193,20 @@ Engine.prototype = {
 		if (y !== undefined && y !== null) { this._pan.y = y; }
 
 		if(!this._isRun) { this.refresh(); }
+	},
+
+
+	//--------------------------------------------------------------------------------------------------
+	// Following object - Scrolling view to keep target object in center of the view
+	//--------------------------------------------------------------------------------------------------
+	following: function(target) {
+		if(target === null) { this._followingTarget = null; }
+
+		if( !(target instanceof GraphicObject) && typeof target !== 'number') { return this._followingTarget; }
+
+		if(typeof target === 'number') { target = this.objects[ target ]; }
+
+		this._followingTarget = target;
 	},
 
 
