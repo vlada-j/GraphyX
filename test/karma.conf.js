@@ -12,14 +12,18 @@ module.exports = function(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
     singleRun: false,
     concurrency: Infinity,
-    browsers: ['Headless_Chrome'],
+    browsers: ['Headless_Chrome', 'FirefoxHeadless', 'Edge'],
     customLaunchers: {
 	  Headless_Chrome: {
 	    base: 'Chrome',
         flags: ['--headless', '--disable-gpu', '--remote-debugging-port=9222', '--http://0.0.0.0:9876/']
+      },
+      FirefoxHeadless: {
+          base: 'Firefox',
+          flags: [ '-headless' ]
       }
     }
   })

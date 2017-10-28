@@ -9,8 +9,8 @@ export default GraphicObject;
 function GraphicObject(settings) {
 
 	this.sprite = settings.sprite;
-	this.fill = settings.fill;
-	this.stroke = settings.stroke;
+	this.fill = settings.fill || 'transparent';
+	this.stroke = settings.stroke || 'transparent';
 	this.line = settings.line || 1;
 	this.x = settings.x || 0;
 	this.y = settings.y || 0;

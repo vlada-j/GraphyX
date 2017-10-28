@@ -172,12 +172,15 @@ Engine.prototype = {
 	// Redraw one frame
 	//--------------------------------------------------------------------------------------------------
 	refresh: function(dt) {
+/*		var now = new Date().getTime(),
+			dt = now - this._lastTimestamp;
+		this._lastTimestamp = now;*/
 		this.clear();
 		this.draw();
 		this.dispatchEvent({
 			type:'update',
 			target:this,
-			delta:dt,
+			delta:dt || 0,
 			fps:this._fps
 		});
 	},
@@ -189,8 +192,8 @@ Engine.prototype = {
 	scroll: function(x, y) {
 		if(x === undefined && y === undefined) { return this._pan; }
 
-		if (x !== undefined && x !== null) { this._pan.x = x; }
-		if (y !== undefined && y !== null) { this._pan.y = y; }
+		if (typeof x === 'number') { this._pan.x = x; }
+		if (typeof y === 'number') { this._pan.y = y; }
 
 		if(!this._isRun) { this.refresh(); }
 	},

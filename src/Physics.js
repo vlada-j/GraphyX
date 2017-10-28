@@ -140,8 +140,8 @@ Physics.prototype = {
 
 		this._control.update();
 
-		dt = dt || 1/30;
-		this._world.Step(dt, 8, 3); // deltaTime, velocityIterations, positionIterations
+		dt = dt || 1/60;
+		this._world.Step(dt, 4, 3); // deltaTime, velocityIterations, positionIterations
 		if(this._debugDrawEnabled) { this._world.DrawDebugData(); }
 		this._world.ClearForces();
 	},

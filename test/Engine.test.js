@@ -74,16 +74,16 @@ describe('GraphyX.Engine tests', function(){
 
 		gx.objects.push(new GraphyX.objects.Line({points:[{x:0, y:0}, {x:10, y:0}], line:2, stroke:'white'}));
 		gx.refresh();
-		expect( canvas.getContext('2d').isPointInStroke(position.x, position.y) ).toBe(true);
+		expect( canvas.getContext('2d').isPointInPath(position.x, position.y) ).toBe(true);
 
 		gx.scroll(100,100);
-		expect( canvas.getContext('2d').isPointInStroke(100, 100) ).toBe(true);
+		expect( canvas.getContext('2d').isPointInPath(100, 100) ).toBe(true);
 
 		gx.scroll(200);
-		expect( canvas.getContext('2d').isPointInStroke(200, 100) ).toBe(true);
+		expect( canvas.getContext('2d').isPointInPath(200, 100) ).toBe(true);
 
 		gx.scroll(null, 300);
-		expect( canvas.getContext('2d').isPointInStroke(200, 300) ).toBe(true);
+		expect( canvas.getContext('2d').isPointInPath(200, 300) ).toBe(true);
 	});
 
 	//--------------------------------------------------------------------------------------------------
@@ -95,12 +95,12 @@ describe('GraphyX.Engine tests', function(){
 
 		gx.objects.push(new GraphyX.objects.Line({points:[{x:0, y:0}, {x:10, y:10}], stroke:'white'}));
 		gx.refresh();
-		expect( ctx.isPointInStroke(canvas.width / 2, canvas.height / 2) ).toBe(true);
-		expect( ctx.isPointInStroke(canvas.width / 2 + 10, canvas.height / 2 + 10) ).toBe(true);
+		expect( ctx.isPointInPath(canvas.width / 2, canvas.height / 2) ).toBe(true);
+		expect( ctx.isPointInPath(canvas.width / 2 + 10, canvas.height / 2 + 10) ).toBe(true);
 
 		gx.zoom(200);
-		expect( ctx.isPointInStroke(canvas.width / 2, canvas.height / 2) ).toBe(true);
-		expect( ctx.isPointInStroke(canvas.width / 2 + 20, canvas.height / 2 + 20) ).toBe(true);
+		expect( ctx.isPointInPath(canvas.width / 2, canvas.height / 2) ).toBe(true);
+		expect( ctx.isPointInPath(canvas.width / 2 + 20, canvas.height / 2 + 20) ).toBe(true);
 	});
 
 	//--------------------------------------------------------------------------------------------------

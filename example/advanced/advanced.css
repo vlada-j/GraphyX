@@ -1,0 +1,11 @@
+body {
+	color:#445578;
+	background:#94a5c8;
+	text-align:center;
+}
+
+#MyCanvas {
+	margin: 20px auto;
+	box-shadow: 0 0 10px black;
+	background:url(bg.png) no-repeat top center;
+}

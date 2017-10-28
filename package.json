@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "2D graphics and physics (Box2D) engine.",
   "scripts": {
-    "build": "./node_modules/.bin/rollup -c"
+    "build": "./node_modules/.bin/rollup -c",
+    "tests": "./node_modules/.bin/karma start test/karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "karma-cli": "^1.0.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.0.1",
+    "karma-edge-launcher": "^0.4.2",
     "karma-jasmine": "^1.1.0",
     "rollup": "^0.48.2",
     "rollup-plugin-uglify": "^2.0.1"
