@@ -60,4 +60,21 @@ describe('GraphyX.utility tests', function() {
 		expect(ab.ob.b).toBe(22);
 		expect(ab.ob.c).toBe(44);
 	});
+
+	//--------------------------------------------------------------------------------------------------
+
+	it('images loader', function() {
+		var list = ['./a.png', './b.png', './c.png', './wrong.png'],
+			callbacks = {
+				ok: function() {console.log('ok');},
+				nok: function() {console.log('nok');}
+			};
+
+		expect(typeof GraphyX.utility.imagesLoader).toBe('function');
+		spyOn(callbacks, 'ok');
+		spyOn(callbacks, 'nok');
+
+		var res = GraphyX.utility.imagesLoader(list);
+		expect(typeof res).toBe('object');
+	});
 });

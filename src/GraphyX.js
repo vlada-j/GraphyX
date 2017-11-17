@@ -12,6 +12,7 @@ import PhysicObject from './physicObjects/PhysicObject.js';
 import PhCircle from './physicObjects/Circle.js';
 import PhRect from './physicObjects/Rect.js';
 import PhPolygon from './physicObjects/Polygon.js';
+import PhLine from './physicObjects/Line.js';
 
 
 window.GraphyX = {
@@ -31,7 +32,8 @@ window.GraphyX = {
 		PhysicObject: PhysicObject,
 		Circle: PhCircle,
 		Rect: PhRect,
-		Polygon: PhPolygon
+		Polygon: PhPolygon,
+		Line: PhLine
 	},
 	utility: utility
 };

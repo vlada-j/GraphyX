@@ -15,29 +15,30 @@ function importBox2D() {
 }
 
 
-import EventDispatcher from './EventDispatcher.js';
+import Engine from './Engine.js';
 import { extend } from './utility.js';
 
 /* *********************************************************************************************** *
  * Physics engine
  * =============================================================================================== *
- * REQUIRE: Box2D, EventDispatcher
+ * REQUIRE: Box2D, Engine
  * *********************************************************************************************** */
 export default Physics;
 
 
 function Physics(settings) {
 	importBox2D();
-	EventDispatcher.call(this);
+	settings = extend({}, Physics.default, settings);
+	Engine.call(this, settings);
 
 	this.CANVAS_WIDTH;
 	this.CANVAS_HEIGHT;
 	this.SCALE;
-	this._settings = settings = extend({}, Physics.default, settings);
 	this._isRun = false;
 	this._world;
-	this._canvas;
-	this._sprite;
+	this._boundaries;
+//	this._canvas;
+//	this._sprite;
 	this._debugDraw;
 	this._control;
 
@@ -45,8 +46,9 @@ function Physics(settings) {
 }
 
 //--------------------------------------------------------------------------------------------------
+Physics.prototype = Object.create(Engine.prototype);
 
-Physics.prototype = {
+extend( Physics.prototype, {
 
 
 	constructor: Physics,
@@ -58,23 +60,24 @@ Physics.prototype = {
 
 	// Initialize
 	init: function(settings) {
+		Engine.prototype.init.call(this, settings);
 		var canvas, gravity, sprite;
 		settings = extend(this._settings, settings);
 
-		canvas = typeof settings.canvas === 'string' ? document.querySelector(settings.canvas) : settings.canvas;
-		sprite = canvas.getContext('2d');
+		// canvas = typeof settings.canvas === 'string' ? document.querySelector(settings.canvas) : settings.canvas;
+		// sprite = canvas.getContext('2d');
 
 		gravity = settings.gravity;
 		gravity = typeof gravity === 'object' ? gravity : {x:0, y:gravity};
 		gravity = new b2Vec2(gravity.x, gravity.y);
 
-		this.CANVAS_WIDTH = canvas.width;
-		this.CANVAS_HEIGHT = canvas.height;
+		// this.CANVAS_WIDTH = canvas.width;
+		// this.CANVAS_HEIGHT = canvas.height;
 		this.SCALE = settings.scale;
 
 		this._settings = settings;
-		this._canvas = canvas;
-		this._sprite = sprite;
+		// this._canvas = canvas;
+		// this._sprite = sprite;
 		this._gravity = gravity;
 		this._isRun = false;
 		this._debugDrawEnabled = !!settings.debugDraw;
@@ -100,6 +103,23 @@ Physics.prototype = {
 	},
 
 
+	// World boundaries
+	createWorldBoundaries: function(width, height) {
+		width = (width || this._canvas.width) / this.SCALE;
+		height = (height || this._canvas.height) / this.SCALE;
+
+		this._boundaries = this.createBody(
+			{ x: - width / 2, y: - height / 2, type:'s' },
+			[
+				{ friction: 1, shape: { type: 'edge', x1: 0,     y1: 0,      x2: width, y2: 0       } },
+				{ friction: 1, shape: { type: 'edge', x1: 0,     y1: height, x2: width, y2: height  } },
+				{ friction: 1, shape: { type: 'edge', x1: 0,     y1: 0,      x2: 0,     y2: height  } },
+				{ friction: 1, shape: { type: 'edge', x1: width, y1: 0,      x2: width, y2: height  } }
+			]
+		);
+	},
+
+
 	//
 	createDebugDraw: function(options) {
 		var dd = new b2DebugDraw();
@@ -114,18 +134,23 @@ Physics.prototype = {
 
 
 	//
-	start: function() {
-		if(this._isRun) { return; }
-		else {
-			this._isRun = true;
-			this.update();
-		}
-	},
+	// start: function() {
+	// 	if(this._isRun) { return; }
+	// 	else {
+	// 		this._isRun = true;
+	// 		this.update();
+	// 	}
+	// },
 
 
 	//
-	stop: function() {
-		this._isRun = false;
+	// stop: function() {
+	// 	this._isRun = false;
+	// },
+
+	refresh: function(dt) {
+		Engine.prototype.refresh.call(this, dt);
+		this.update(dt/1000);
 	},
 
 
@@ -133,10 +158,10 @@ Physics.prototype = {
 	update: function(dt) {
 		var self = this;
 
-		if(this._isRun) {
-			// fix bug for Chrome
-			window.requestAnimationFrame(function(){ self.update.call(self) });
-		}
+		/*		if(this._isRun) {
+					// fix bug for Chrome
+					window.requestAnimationFrame(function(){ self.update.call(self) });
+				}*/
 
 		this._control.update();
 
@@ -148,9 +173,11 @@ Physics.prototype = {
 
 
 
-	/* **************** *
-	 * CONTROLE SECTION *
-	 * **************** */
+	/* ******************* *
+	 * CONTROL SECTION     *
+	 * =================== *
+	 * Working in progress *
+	 * ******************* */
 	setDirectControl: function() {
 		var mouseX, mouseY, mousePVec, isMouseDown, selectedBody, mouseJoint;
 		var canvasPosition = this._canvas.getBoundingClientRect();
@@ -207,7 +234,7 @@ Physics.prototype = {
 			else {
 				return;
 			}
-			rp = ge.getCoordinateFrom(clientX - canvasPosition.left, clientY - canvasPosition.top);
+			rp = self.getCoordinateFrom(clientX - canvasPosition.left, clientY - canvasPosition.top);
 			mouseX = rp.x / self.SCALE;
 			mouseY = rp.y / self.SCALE;
 			// mouseX = (clientX - canvasPosition.left) / self.SCALE;
@@ -415,7 +442,7 @@ Physics.prototype = {
 			body.GetWorldCenter()
 		);
 	}
-};
+});
 
 
 //--------------------------------------------------------------------------------------------------

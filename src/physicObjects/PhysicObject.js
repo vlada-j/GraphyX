@@ -10,10 +10,10 @@ export default PhysicObject;
 
 
 function PhysicObject(settings, physics, scale) {
-	this.type = settings.type;
-	this.density = settings.density;
-	this.friction = settings.friction;
-	this.restitution = settings.restitution;
+	this.type = settings.type || 'd';
+	this.density = settings.density || 1.0;
+	this.friction = settings.friction || 0;
+	this.restitution = settings.restitution || 0;
 	this.scale = scale;
 
 	var self = this;
