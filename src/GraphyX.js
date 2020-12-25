@@ -7,7 +7,7 @@ import Line from './objects/Line.js';
 import Polygon from './objects/Polygon.js';
 import Image from './objects/Image.js';
 import Physics from './Physics.js';
-import utility from './utility.js';
+import utility from './utilities/utility.js';
 import PhysicObject from './physicObjects/PhysicObject.js';
 import PhCircle from './physicObjects/Circle.js';
 import PhRect from './physicObjects/Rect.js';

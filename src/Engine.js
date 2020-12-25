@@ -6,44 +6,37 @@ import GraphicObject from './objects/GraphicObject.js';
  * =============================================================================================== *
  * REQUIRE: EventDispatcher
  * *********************************************************************************************** */
-export default Engine;
 
 
-function Engine(settings) {
-	EventDispatcher.call(this);
+class Engine extends EventDispatcher {
 
-	this._settings = settings;
-	this._canvas = null;
-	this._sprite = null;
-	this.CANVAS_WIDTH = 0;
-	this.CANVAS_HEIGHT = 0;
-	this._zoom = 1;
-	this._pan = { x:0, y:0 };
-	this._isRun = false;
-	this._lastTimestamp = 0;
-	this._fps = 0;
-	this._followingTarget = null;
-	this._onUpdate = function() {};
+	constructor(settings) {
+		super();
+		this._settings = settings;
+		this._canvas = null;
+		this._sprite = null;
+		this.CANVAS_WIDTH = 0;
+		this.CANVAS_HEIGHT = 0;
+		this._zoom = 1;
+		this._pan = { x:0, y:0 };
+		this._isRun = false;
+		this._lastTimestamp = 0;
+		this._fps = 0;
+		this._followingTarget = null;
+		this._onUpdate = function() {};
 
-	// List of objects who will be plotted
-	this.objects = [];
+		// List of objects who will be plotted
+		this.objects = [];
 
-	this.init(settings);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-Engine.prototype = {
-
-
-	constructor: Engine,
+		this.init();
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Initialize
 	//--------------------------------------------------------------------------------------------------
-	init: function() {
-		var canvas, sprite,
+	init() {
+		let canvas, sprite,
 			settings = this._settings;
 
 		canvas = typeof settings.canvas === 'string' ? document.querySelector(settings.canvas) : settings.canvas;
@@ -61,46 +54,46 @@ Engine.prototype = {
 		this._canvas = canvas;
 		this._sprite = sprite;
 		this._isRun = false;
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Resizing canvas
 	//--------------------------------------------------------------------------------------------------
-	resize: function(w, h) {
+	resize(w, h) {
 		this._canvas.width = this.CANVAS_WIDTH = w;
 		this._canvas.height = this.CANVAS_HEIGHT = h;
 		this._pan = {
 			x: w / 2,
 			y: h / 2
 		};
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Start engine
 	//--------------------------------------------------------------------------------------------------
-	start: function() {
+	start() {
 		if(!this._isRun) {
 			this._isRun = true;
 			this._lastTimestamp = new Date().getTime();
 			this.loop();
 		}
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Stop engine
 	//--------------------------------------------------------------------------------------------------
-	stop: function() {
+	stop() {
 		this._isRun = false;
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Looping
 	//--------------------------------------------------------------------------------------------------
-	loop: function() {
+	loop() {
 		var self = this,
 			now = new Date().getTime(),
 			dt = now - this._lastTimestamp;
@@ -113,23 +106,23 @@ Engine.prototype = {
 			window.requestAnimationFrame(function(){ self.loop.call(self) });
 		}
 		this.refresh(dt);
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	//
 	//--------------------------------------------------------------------------------------------------
-	onUpdate: function( fn ) {
-		var old = this._onUpdate;
+	onUpdate( fn ) {
+		let old = this._onUpdate;
 		this._onUpdate = function() { old(); if(typeof fn === 'function') { fn(); } };
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Drawing objects
 	//--------------------------------------------------------------------------------------------------
-	draw: function() {
-		var self = this;
+	draw() {
+		let self = this;
 
 		if(self.objects instanceof Array) {
 			self.objects.forEach(drawObject);
@@ -140,13 +133,13 @@ Engine.prototype = {
 				obj.render(self._sprite);
 			}
 		}
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Clear canvas
 	//--------------------------------------------------------------------------------------------------
-	clear: function() {
+	clear() {
 		this._sprite.setTransform(1,0,0,1,0,0);
 
 		if(typeof this._fade === 'number') {
@@ -165,14 +158,14 @@ Engine.prototype = {
 		}
 		this._sprite.translate(this._pan.x, this._pan.y);
 		this._sprite.scale(this._zoom, this._zoom);
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Redraw one frame
 	//--------------------------------------------------------------------------------------------------
-	refresh: function(dt) {
-/*		var now = new Date().getTime(),
+	refresh(dt) {
+/*		let now = new Date().getTime(),
 			dt = now - this._lastTimestamp;
 		this._lastTimestamp = now;*/
 		this.clear();
@@ -183,26 +176,26 @@ Engine.prototype = {
 			delta:dt || 0,
 			fps:this._fps
 		});
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Scrolling position of viewport
 	//--------------------------------------------------------------------------------------------------
-	scroll: function(x, y) {
+	scroll(x, y) {
 		if(x === undefined && y === undefined) { return this._pan; }
 
 		if (typeof x === 'number') { this._pan.x = x; }
 		if (typeof y === 'number') { this._pan.y = y; }
 
 		if(!this._isRun) { this.refresh(); }
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Following object - Scrolling view to keep target object in center of the view
 	//--------------------------------------------------------------------------------------------------
-	following: function(target) {
+	following(target) {
 		if(target === null) { this._followingTarget = null; }
 
 		if( !(target instanceof GraphicObject) && typeof target !== 'number') { return this._followingTarget; }
@@ -210,26 +203,26 @@ Engine.prototype = {
 		if(typeof target === 'number') { target = this.objects[ target ]; }
 
 		this._followingTarget = target;
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Zooming
 	//--------------------------------------------------------------------------------------------------
-	zoom: function(z) {
+	zoom(z) {
 		if(z === undefined) { return this._zoom * 100; }
 
 		this._zoom = z/100 || this._zoom;
 
 		if(!this._isRun) { this.refresh(); }
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Get real coordinate of some pixel on canvas
 	//--------------------------------------------------------------------------------------------------
-	getCoordinateFrom: function(x, y) {
-		var z = this._zoom,
+	getCoordinateFrom(x, y) {
+		let z = this._zoom,
 			px = this._pan.x,
 			py = this._pan.y;
 
@@ -237,14 +230,14 @@ Engine.prototype = {
 			x: (x - px) / z,
 			y: (y - py) / z
 		};
-	},
+	}
 
 
 	//--------------------------------------------------------------------------------------------------
 	// Get pixel color from coordinate
 	//--------------------------------------------------------------------------------------------------
-	getPixel: function(x, y) {
-		var pixel = this._sprite.getImageData(x, y, 1, 1).data;
+	getPixel(x, y) {
+		let pixel = this._sprite.getImageData(x, y, 1, 1).data;
 
 		return {
 			r: pixel[0],
@@ -253,4 +246,6 @@ Engine.prototype = {
 			a: pixel[3],
 		};
 	}
-};
+}
+
+export default Engine;

@@ -47,11 +47,12 @@ describe('GraphyX.EventDispatcher tests', function(){
 	//--------------------------------------------------------------------------------------------------
 
 	it('Inheritance', function() {
-		
-		function TestObject() {
-			GraphyX.EventDispatcher.call(this);
 
-			this.handler = function() {};
+		class TestObject extends GraphyX.EventDispatcher {
+			constructor() {
+				super();
+				this.handler = function() {};
+			}
 		}
 
 		let to = new TestObject();

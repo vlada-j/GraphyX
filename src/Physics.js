@@ -16,42 +16,33 @@ function importBox2D() {
 
 
 import Engine from './Engine.js';
-import { extend } from './utility.js';
+import { extend } from './utilities/utility.js';
 
 /* *********************************************************************************************** *
  * Physics engine
  * =============================================================================================== *
  * REQUIRE: Box2D, Engine
  * *********************************************************************************************** */
-export default Physics;
 
 
-function Physics(settings) {
-	importBox2D();
-	settings = extend({}, Physics.default, settings);
-	Engine.call(this, settings);
+class Physics extends Engine {
 
-	this.CANVAS_WIDTH;
-	this.CANVAS_HEIGHT;
-	this.SCALE;
-	this._isRun = false;
-	this._world;
-	this._boundaries;
-//	this._canvas;
-//	this._sprite;
-	this._debugDraw;
-	this._control;
+	constructor(settings) {
+		importBox2D();
+		settings = extend({}, Physics.default, settings);
+		super(settings);
 
-	this.init(settings);
-}
-
-//--------------------------------------------------------------------------------------------------
-Physics.prototype = Object.create(Engine.prototype);
-
-extend( Physics.prototype, {
-
-
-	constructor: Physics,
+		this.CANVAS_WIDTH;
+		this.CANVAS_HEIGHT;
+		this.SCALE;
+		this._isRun = false;
+		this._world;
+		this._boundaries;
+	//	this._canvas;
+	//	this._sprite;
+		this._debugDraw;
+		this._control;
+	}
 
 
 	/* ***************************** *
@@ -59,10 +50,10 @@ extend( Physics.prototype, {
 	 * ***************************** */
 
 	// Initialize
-	init: function(settings) {
-		Engine.prototype.init.call(this, settings);
-		var canvas, gravity, sprite;
-		settings = extend(this._settings, settings);
+	init() {
+		super.init();
+		let canvas, gravity, sprite;
+		let settings = this._settings;
 
 		// canvas = typeof settings.canvas === 'string' ? document.querySelector(settings.canvas) : settings.canvas;
 		// sprite = canvas.getContext('2d');
@@ -84,11 +75,11 @@ extend( Physics.prototype, {
 
 		this._control = this.setDirectControl();
 		this._control[ settings.directControl ? 'turnOn' : 'turnOff' ]();
-	},
+	}
 
 
 	// Create Box2D world
-	createWorld: function() {
+	createWorld() {
 		var self = this;
 		this._world = new b2World(this._gravity, true);
 		if(this._debugDrawEnabled) {
@@ -100,11 +91,11 @@ extend( Physics.prototype, {
 			});
 			this._world.SetDebugDraw(this._debugDraw);
 		}
-	},
+	}
 
 
 	// World boundaries
-	createWorldBoundaries: function(width, height) {
+	createWorldBoundaries(width, height) {
 		width = (width || this._canvas.width) / this.SCALE;
 		height = (height || this._canvas.height) / this.SCALE;
 
@@ -117,11 +108,11 @@ extend( Physics.prototype, {
 				{ friction: 1, shape: { type: 'edge', x1: width, y1: 0,      x2: width, y2: height  } }
 			]
 		);
-	},
+	}
 
 
 	//
-	createDebugDraw: function(options) {
+	createDebugDraw(options) {
 		var dd = new b2DebugDraw();
 		dd.SetSprite(options.sprite);
 		dd.SetDrawScale(options.scale);
@@ -130,32 +121,32 @@ extend( Physics.prototype, {
 		dd.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 		this._debugDrawEnabled = true;
 		return dd;
-	},
+	}
 
 
 	//
-	// start: function() {
+	// start() {
 	// 	if(this._isRun) { return; }
 	// 	else {
 	// 		this._isRun = true;
 	// 		this.update();
 	// 	}
-	// },
+	// }
 
 
 	//
-	// stop: function() {
+	// stop() {
 	// 	this._isRun = false;
-	// },
+	// }
 
-	refresh: function(dt) {
+	refresh(dt) {
 		Engine.prototype.refresh.call(this, dt);
 		this.update(dt/1000);
-	},
+	}
 
 
 	//
-	update: function(dt) {
+	update(dt) {
 		var self = this;
 
 		/*		if(this._isRun) {
@@ -169,7 +160,7 @@ extend( Physics.prototype, {
 		this._world.Step(dt, 4, 3); // deltaTime, velocityIterations, positionIterations
 		if(this._debugDrawEnabled) { this._world.DrawDebugData(); }
 		this._world.ClearForces();
-	},
+	}
 
 
 
@@ -178,7 +169,7 @@ extend( Physics.prototype, {
 	 * =================== *
 	 * Working in progress *
 	 * ******************* */
-	setDirectControl: function() {
+	setDirectControl() {
 		var mouseX, mouseY, mousePVec, isMouseDown, selectedBody, mouseJoint;
 		var canvasPosition = this._canvas.getBoundingClientRect();
 		var self = this;
@@ -266,7 +257,7 @@ extend( Physics.prototype, {
 				}
 			}
 		}
-	},
+	}
 
 
 
@@ -275,7 +266,7 @@ extend( Physics.prototype, {
 	 * ************ */
 
 	// Get list of all bodies
-	getBodyList: function() {
+	getBodyList() {
 		var list = [];
 
 		getBody( this._world.GetBodyList() );
@@ -287,11 +278,11 @@ extend( Physics.prototype, {
 				getBody(body.GetNext());
 			}
 		}
-	},
+	}
 
 
 	// Get details of body
-	getBodyDetails: function(body) {
+	getBodyDetails(body) {
 		var type = ['static', 'kinematic', 'dynamic'][ body.GetType() ],
 			position = body.GetPosition(),
 			fixtures = [];
@@ -326,11 +317,11 @@ extend( Physics.prototype, {
 				getFixtures(fix.GetNext());
 			}
 		}
-	},
+	}
 
 
 	//
-	getBodyAt: function(x, y) {
+	getBodyAt(x, y) {
 		var mousePVec = new b2Vec2(x, y);
 		var aabb = new b2AABB();
 		aabb.lowerBound.Set(x - 0.001, y - 0.001);
@@ -350,12 +341,12 @@ extend( Physics.prototype, {
 			}
 			return true;
 		}
-	},
+	}
 
 
 
 	// Create body
-	createBody: function(options, fixtures, data) {
+	createBody(options, fixtures, data) {
 		var self = this,
 			TYPE = {
 				s:b2Body.b2_staticBody,
@@ -382,22 +373,22 @@ extend( Physics.prototype, {
 		function addFixtures(f) {
 			b.CreateFixture( self.createFixture(f) );
 		}
-	},
+	}
 
 
 	// Create fixture
-	createFixture: function(options) {
+	createFixture(options) {
 		var fixture = new b2FixtureDef();
 		fixture.density = options.density;
 		fixture.friction = options.friction;
 		fixture.restitution = options.restitution;
 		fixture.shape = this.createShape(options.shape);
 		return fixture;
-	},
+	}
 
 
 	// Create shape
-	createShape: function(options) {
+	createShape(options) {
 		var shape = new b2PolygonShape();
 
 		switch(options.type) {
@@ -416,24 +407,25 @@ extend( Physics.prototype, {
 				shape.SetAsArray(vectors, vectors.length);
 		}
 		return shape;
-	},
+	}
 
 
 	//
-	addRevoluteJoint: function(body1, body2, params) {
+	addRevoluteJoint(body1, body2, params) {
 		var joint = new b2RevoluteJointDef();
 		joint.Initialize(body1, body2, body1.GetWorldCenter());
 		if (params && params.motorSpeed) {
 			joint.motorSpeed = params.motorSpeed;
 			joint.maxMotorTorque = params.maxMotorTorque;
-			joint.enableMotor = true;
+			joint.enableMotor = params.enableMotor;
 		}
-		this._world.CreateJoint(joint);
-	},
+
+		return this._world.CreateJoint(joint);
+	}
 
 
 	// Apply impulse to body
-	applyImpulse: function(body, degrees, power) {
+	applyImpulse(body, degrees, power) {
 		body.ApplyImpulse(
 			new b2Vec2(
 				Math.cos(degrees * (Math.PI / 180)) * power,
@@ -442,7 +434,7 @@ extend( Physics.prototype, {
 			body.GetWorldCenter()
 		);
 	}
-});
+}
 
 
 //--------------------------------------------------------------------------------------------------
@@ -453,3 +445,6 @@ Physics.default = {
 	scale: 30,		// 30px = 1 meter
 	gravity: 9.8	// Earth gravity
 };
+
+
+export default Physics;

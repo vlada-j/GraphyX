@@ -15,15 +15,17 @@
   "license": "MIT",
   "homepage": "https://github.com/vlada-j/GraphyX#readme",
   "devDependencies": {
-    "http-server": "^0.10.0",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@rollup/plugin-babel": "^5.2.2",
     "jasmine": "^2.8.0",
     "karma": "^1.7.1",
-    "karma-cli": "^1.0.1",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.0.1",
+    "karma-cli": "^1.0.1",
     "karma-edge-launcher": "^0.4.2",
+    "karma-firefox-launcher": "^1.0.1",
     "karma-jasmine": "^1.1.0",
-    "rollup": "^0.48.2",
-    "rollup-plugin-uglify": "^2.0.1"
+    "rollup": "^2.35.1",
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
