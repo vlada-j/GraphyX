@@ -1,4 +1,4 @@
-const SCALE = 60,
+var SCALE = 60,
 	COLOR_FILL = '#313649', //'#313649',
 	COLOR_STROKE = 'transparent'; //'#9ba5c5';
 
@@ -14,7 +14,7 @@ var	physics = new GraphyX.Physics({
 var gx = physics;
 
 physics.createWorld();
-physics.createWorldBoundaries();
+physics.createWorldBoundaries(2400, 800);
 
 Car();
 makeCircle();
@@ -37,11 +37,13 @@ makeBox();
 makeCircle();*/
 
 makePath([
+	[-1200, 300],
 	[-950, 300],
 	[-400, 250],
 	[0, 150],
 	[400, 200],
-	[950, 400]
+	[950, 400],
+	[1200, 400],
 ]);
 
 /*gx.objects.push( new GraphyX.physicObjects.Line({
@@ -93,7 +95,7 @@ gx.objects.push( new GraphyX.physicObjects.Line({
 	]
 }, physics, SCALE) );*/
 
-let carPower = 0;
+var carPower = 0;
 document.body.addEventListener('keydown', onKeyPress);
 document.body.addEventListener('keyup', onKeyUp);
 
@@ -169,7 +171,7 @@ function makePolygon(options) {
 function createPoints(n, r) {
 	n = n || Math.round( Math.random() * 5 ) + 3;
 	r = r || 30;
-	let i, p = [], pr = Math.PI*2/n;
+	var i, p = [], pr = Math.PI*2/n;
 	for(i=0;i<n;i++) {
 		p.push( { x:Math.cos(pr * i) * r, y: Math.sin(pr * i) * r } );
 	}
@@ -179,7 +181,7 @@ function createPoints(n, r) {
 //--------------------------------------------------------------------------------------------------
 
 function Car() {
-	var x = -920, y = 250;
+	var x = -1150, y = 250;
 	var opt = {motorSpeed:-15, maxMotorTorque:250, enableMotor:true};
 
 	var wheel1 = new GraphyX.physicObjects.Circle(

@@ -1,3 +1,4 @@
+// npm i -D @babel/core @babel/preset-env @rollup/plugin-babel rollup rollup-plugin-uglify
 import { uglify } from "rollup-plugin-uglify";
 import babel from '@rollup/plugin-babel';
 
