@@ -1,5 +1,5 @@
-// npm i -D @babel/core @babel/preset-env @rollup/plugin-babel rollup rollup-plugin-uglify
-import { uglify } from "rollup-plugin-uglify";
+// npm i -D @babel/core @babel/preset-env @rollup/plugin-babel rollup rollup-plugin-terser
+import { terser } from "rollup-plugin-terser";
 import babel from '@rollup/plugin-babel';
 
 const config = {
@@ -9,7 +9,7 @@ const config = {
 	],
 	plugins: [
 		babel({ presets: ['@babel/preset-env'], babelHelpers: 'bundled' }),
-		uglify()
+		terser()
 	]
 };
 
