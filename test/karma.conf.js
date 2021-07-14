@@ -15,7 +15,7 @@ module.exports = function(config) {
     autoWatch: false,
     singleRun: false,
     concurrency: Infinity,
-    browsers: ['Headless_Chrome', 'FirefoxHeadless', 'Edge'],
+    browsers: ['Headless_Chrome', 'FirefoxHeadless'],
     customLaunchers: {
 	  Headless_Chrome: {
 	    base: 'Chrome',
